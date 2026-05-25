@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kapptur • Diagnóstico Premium</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body{
+  background: #0a0e27;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+/* PROGRESS */
+.progress {
+  height: 3px;
+  background: linear-gradient(90deg, #00d9ff 0%, #ff006e 50%, #00d9ff 100%);
+  transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+}
+
+/* OPTION */
+.option {
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px solid rgba(0, 217, 255, 0.2);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.15), transparent);
+  transition: left .6s ease;
+}
+
+.option:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 217, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
+  background: rgba(0, 217, 255, 0.03);
+}
+
+.option:hover::before {
+  left: 100%;
+}
+
+.option .font-semibold {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.option .text-sm {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+/* VOLTAR */
+.btn-voltar {
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.02);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+.btn-voltar:hover {
+  border-color: rgba(0, 217, 255, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.1);
+  background: rgba(0, 217, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* INPUT */
+input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid rgba(0, 217, 255, 0.2);
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+input:focus {
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+  border-color: rgba(0, 217, 255, 0.6);
+  background: rgba(0, 217, 255, 0.03);
+  outline: none;
+}
+
+/* BUTTON PRIMARY */
+button:not(.btn-voltar):not(.option) {
+  background: linear-gradient(135deg, #00d9ff 0%, #ff006e 100%);
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.25);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+button:not(.btn-voltar):not(.option)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left .6s ease;
+}
+
+button:not(.btn-voltar):not(.option):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 217, 255, 0.35);
+}
+
+button:not(.btn-voltar):not(.option):hover::before {
+  left: 100%;
+}
+
+/* ANIMAÇÃO */
+#app {
+  animation: fadeUp .5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* TÍTULO */
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #00d9ff 0%, #ff006e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  line-height: 1.1;
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* SUBTITLE */
+.text-gray-400 {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* PROGRESS BARS */
+.bg-violet-500 {
+  background: linear-gradient(90deg, #00d9ff, #00b8ff);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+}
+
+.bg-fuchsia-500 {
+  background: linear-gradient(90deg, #ff006e, #ff3d7f);
+  box-shadow: 0 0 12px rgba(255, 0, 110, 0.4);
+}
+
+.bg-indigo-500 {
+  background: linear-gradient(90deg, #00d9ff, #ff006e);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
+}
+
+.bg-pink-500 {
+  background: linear-gradient(90deg, #ff006e, #ffb703);
+  box-shadow: 0 0 12px rgba(255, 0, 110, 0.3);
+}
+
+.bg-gray-800 {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 217, 255, 0.1);
+}
+
+/* RESULT BOX */
+.bg-gray-900 {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px solid rgba(0, 217, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 217, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.bg-gray-900 p {
+  color: #ffffff;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.bg-gray-900 .text-gray-300 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* MOBILE */
+@media(max-width: 768px) {
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: flex-start;
+    padding: 12px 20px 24px;
+    min-height: 100dvh;
+  }
+
+  .max-w-2xl {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.9rem !important;
+    line-height: 1.25;
+  }
+
+  .text-center.mb-10 {
+    margin-bottom: 2rem;
+  }
+
+  #app .mb-10 {
+    margin-bottom: 2rem !important;
+  }
+
+  #app .mt-10 {
+    margin-top: 2rem !important;
+  }
+
+  .option {
+    padding: 1rem !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress fixed top-0 left-0 w-full" id="progress"></div>
+
+<div class="max-w-2xl w-full px-6">
+
+<div class="text-center mb-10">
+  <h1>Kapptur</h1>
+  <p class="text-gray-400 text-sm mt-2">Diagnóstico de Maturidade Digital</p>
+</div>
+
+<div id="app"></div>
+
+</div>
+
+<script>
+
+let i = 0;
+let stack = [];
+let data = {};
+let score = 0;
+
+/* =========================
+   QUIZ FINAL COMPLETO
+========================= */
+
+const quiz = [
+
+{
+title:"Você tem Instagram ativo para sua empresa?",
+options:[
+{text:"Sim, postamos regularmente", key:"instagram", value:"ativo", score:10},
+{text:"Sim, mas abandonado", key:"instagram", value:"fraco", score:5},
+{text:"Não temos", key:"instagram", value:"nenhum", score:0}
+]
+},
+
+{
+title:"Como você capta clientes hoje?",
+options:[
+{text:"Orgânico (Instagram, indicação)", key:"trafego", value:"org", score:5},
+{text:"Tráfego pago (Meta Ads, Google Ads)", key:"trafego", value:"pago", score:15},
+{text:"Nenhum dos dois", key:"trafego", value:"none", score:0},
+{text:"Mistura dos dois", key:"trafego", value:"mix", score:12}
+]
+},
+
+{
+title:"Seu faturamento é previsível?",
+options:[
+{text:"Totalmente imprevisível", key:"prev", value:"ruim", score:5},
+{text:"Oscila bastante", key:"prev", value:"medio", score:10},
+{text:"Bastante previsível", key:"prev", value:"bom", score:15}
+]
+},
+
+{
+title:"Qual seu faturamento mensal aproximado?",
+options:[
+{text:"Até R$ 30 mil", key:"fat", value:"baixo", score:0},
+{text:"R$ 30k a R$ 50k", key:"fat", value:"medio", score:8},
+{text:"R$ 50k a R$ 100k", key:"fat", value:"alto", score:15},
+{text:"Acima de R$ 100k", key:"fat", value:"escala", score:20}
+]
+},
+
+{
+title:"Você tem equipe de vendas interna?",
+options:[
+{text:"1 vendedor", key:"equipe", value:"1", score:5},
+{text:"2 a 4 vendedores", key:"equipe", value:"2-4", score:10},
+{text:"5+ vendedores", key:"equipe", value:"5+", score:15}
+]
+},
+
+{
+title:"Onde você quer captar clientes?",
+options:[
+{text:"Minha cidade", key:"regiao", value:"cidade", score:5},
+{text:"Meu estado", key:"regiao", value:"estado", score:8},
+{text:"Brasil inteiro", key:"regiao", value:"brasil", score:12}
+]
+},
+
+{
+title:"Qual seu maior problema no momento?",
+options:[
+{text:"Faturamento caiu ou parou", key:"problema", value:"queda", score:5},
+{text:"Não consigo gerar demanda constante", key:"problema", value:"demanda", score:10},
+{text:"Tráfego pago não está funcionando", key:"problema", value:"trafego", score:12},
+{text:"Preciso de clientes em 15 dias", key:"problema", value:"urgencia", score:15},
+{text:"Estou abrindo nova unidade", key:"problema", value:"expansao", score:12}
+]
+},
+
+{
+title:"Qual seu principal objetivo nos próximos 6 meses?",
+options:[
+{text:"Escalar faturamento (2x+)", key:"objetivo", value:"escala", score:15},
+{text:"Abrir novas unidades", key:"objetivo", value:"expansao", score:15},
+{text:"Aumentar ticket médio", key:"objetivo", value:"ticket", score:12},
+{text:"Dominar minha cidade/estado", key:"objetivo", value:"dominancia", score:12},
+{text:"Transformar em franquia", key:"objetivo", value:"franquia", score:20}
+]
+},
+
+{
+title:"Qual sua cidade?",
+input:true,
+key:"cidade"
+},
+
+{
+title:"Qual seu produto ou serviço?",
+input:true,
+key:"produto"
+}
+
+];
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+const q = quiz[i];
+
+let html = `
+<h2 class="text-center text-3xl font-bold mb-3">${q.title}</h2>
+
+<p class="text-center text-gray-400 text-sm mb-10">
+Diagnóstico estratégico para mapear maturidade digital e potencial de crescimento.
+</p>
+`;
+
+if(q.input){
+
+html += `
+<input id="input" class="w-full p-5 rounded-2xl bg-gray-900 border border-gray-700 mb-6 text-center" />
+
+<button onclick="nextInput()"
+class="w-full py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl font-bold">
+Continuar →
+</button>
+`;
+
+} else {
+
+html += `<div class="space-y-4">`;
+
+q.options.forEach(o=>{
+
+let exp = "";
+
+/* explicações */
+if(o.text.includes("regularmente")) exp="Postagem consistente no Instagram com presença ativa.";
+if(o.text.includes("abandonado")) exp="Perfil sem estratégia e baixa frequência.";
+if(o.text.includes("Não temos")) exp="Sem presença no Instagram.";
+if(o.text.includes("Orgânico")) exp="Aquisição via indicação e conteúdo.";
+if(o.text.includes("Tráfego pago")) exp="Aquisição via anúncios pagos.";
+if(o.text.includes("Nenhum")) exp="Sem sistema de aquisição.";
+if(o.text.includes("Mistura")) exp="Combina orgânico e pago.";
+if(o.text.includes("Imprevisível")) exp="Faturamento instável.";
+if(o.text.includes("Oscila")) exp="Receita variável.";
+if(o.text.includes("Previsível")) exp="Receita estável.";
+if(o.text.includes("Até R$ 30")) exp="Fase inicial.";
+if(o.text.includes("30k")) exp="Fase de crescimento.";
+if(o.text.includes("50k")) exp="Fase de escala.";
+if(o.text.includes("100k")) exp="Alta maturidade.";
+if(o.text.includes("1 vendedor")) exp="Estrutura comercial inicial.";
+if(o.text.includes("2 a 4")) exp="Equipe em crescimento.";
+if(o.text.includes("5+")) exp="Time estruturado.";
+if(o.text.includes("cidade")) exp="Foco local.";
+if(o.text.includes("estado")) exp="Foco regional.";
+if(o.text.includes("Brasil")) exp="Foco nacional.";
+if(o.text.includes("Faturamento caiu")) exp="Queda de receita.";
+if(o.text.includes("Não consigo gerar")) exp="Falta de demanda.";
+if(o.text.includes("Tráfego pago não")) exp="Campanhas ineficientes.";
+if(o.text.includes("clientes em 15")) exp="Urgência alta.";
+if(o.text.includes("nova unidade")) exp="Expansão.";
+if(o.text.includes("Escalar")) exp="Crescimento agressivo.";
+if(o.text.includes("franquia")) exp="Modelo de expansão.";
+
+html += `
+<button onclick='select(${JSON.stringify(o)})'
+class="option w-full text-left p-5 bg-gray-900 border border-gray-700 rounded-2xl">
+
+<div class="font-semibold">${o.text}</div>
+<div class="text-sm text-gray-400 mt-1">${exp}</div>
+
+</button>
+`;
+});
+
+html += `</div>`;
+}
+
+if(i>0){
+html += `
+<div class="mt-10">
+<button onclick="back()" class="btn-voltar w-full py-4 rounded-2xl">
+← VOLTAR
+</button>
+</div>`;
+}
+
+document.getElementById("app").innerHTML = html;
+updateProgress();
+}
+
+/* =========================
+   LOGIC
+========================= */
+
+function select(o){
+data[o.key] = o.value;
+score += o.score;
+stack.push(i);
+i++;
+render();
+}
+
+function nextInput(){
+const val = document.getElementById("input").value;
+if(!val) return alert("Preencha");
+data[quiz[i].key] = val;
+stack.push(i);
+i++;
+if(i>=quiz.length) finish();
+else render();
+}
+
+function back(){
+i = stack.pop();
+render();
+}
+
+function updateProgress(){
+document.getElementById("progress").style.width =
+(i/quiz.length)*100 + "%";
+}
+
+/* =========================
+   RESULT
+========================= */
+
+function level(){
+if(score>=40) return "🔥 QUENTE";
+if(score>=25) return "⚠️ MORNO";
+return "❄️ FRIO";
+}
+
+/* =========================
+   CRM
+========================= */
+
+async function sendCRM(){
+await fetch("https://rdwhwzrgsixouaehlszc.supabase.co/functions/v1/webhook-user-lead?user=bdf4afcb-76c0-4b04-be0f-aaaba85e427c&pipeline=b036b2fd-741c-4349-8857-22e7b29a8495&stage=contact",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({...data,score,level:level()})
+});
+alert("Enviado com sucesso!");
+}
+
+/* =========================
+   FINAL
+========================= */
+
+function finish(){
+
+const estrutura = Math.min(100, score*0.8);
+const pos = Math.min(100, score*0.6);
+const escala = Math.min(100, score*1.2);
+const conversao = Math.min(100, score*0.5);
+
+document.getElementById("app").innerHTML = `
+
+<div class="text-center">
+
+<h2 class="text-4xl font-bold mb-4">Diagnóstico Concluído</h2>
+
+<p class="text-2xl mb-2">${level()}</p>
+<p class="mb-8">Score: ${score}</p>
+
+<div class="bg-gray-900 p-6 rounded-2xl text-left space-y-6">
+
+<p class="text-gray-300">
+Identificamos oportunidades claras de crescimento na sua operação.
+</p>
+
+<div>
+<p>Estrutura Comercial — ${estrutura.toFixed(0)}%</p>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-violet-500 rounded-full" style="width:${estrutura}%"></div>
+</div>
+</div>
+
+<div>
+<p>Posicionamento — ${pos.toFixed(0)}%</p>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-fuchsia-500 rounded-full" style="width:${pos}%"></div>
+</div>
+</div>
+
+<div>
+<p>Escala — ${escala.toFixed(0)}%</p>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-indigo-500 rounded-full" style="width:${escala}%"></div>
+</div>
+</div>
+
+<div>
+<p>Conversão — ${conversao.toFixed(0)}%</p>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-pink-500 rounded-full" style="width:${conversao}%"></div>
+</div>
+</div>
+
+</div>
+
+<button onclick="sendCRM()"
+class="mt-8 w-full py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl font-bold">
+ENVIAR
+</button>
+
+</div>
+`;
+
+updateProgress();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
